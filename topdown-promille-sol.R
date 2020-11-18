@@ -26,6 +26,7 @@ tell_me_how_drunk <- function(age, sex, height, weight, drinking_time, drinks) {
   names(drinks) <- tolower(names(drinks))
   check_input(age, sex, height, weight, drinking_time, drinks)
   drinks <- as.list(unlist(drinks))
+  check_illegal_drink(age, drinks)
   
   # variables required for BAC computing
   alc_mass <- compute_alc_mass(drinks)
@@ -57,20 +58,24 @@ check_input <- function(age, sex, height, weight, drinking_time, drinks) {
 
   checkmate::assert_subset(names(drinks), choices = c("massn", "hoibe", "wein", "schnaps"))
   checkmate::assert_subset(sex, choices = c("male", "female", "m", "f"))
-  
-  if ((age < 16 && drinks > 0) || 
-      (age < 18 && isTRUE(total_count_single_drink(drinks, "schnaps") > 0))) {
-    warning("illegal drinking age.")
-  }
 }
+
 
 #' count total number of drinks of a several type consumed
 #' @param drinks list with number of consumed drinks 
 #' @param drink_name the name of a drink the total amount of which has to be 
 #' computed as a character
 #' @return total number of drinks of a several type consumed
-total_count_single_drink <- function(drinks, drink_name){
+total_count_single_drink <- function(drinks, drink_name) {
   do.call(sum, drinks[names(drinks) == drink_name])
+}
+
+# check legality of drinking age 
+check_illegal_drink <- function(age, drinks) {
+  if ((age < 16 && drinks > 0) || 
+      (age < 18 && isTRUE(total_count_single_drink(drinks, "schnaps") > 0))) {
+    warning("illegal drinking age.")
+  }
 }
 
 
