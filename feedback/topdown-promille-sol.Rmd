@@ -1,0 +1,12 @@
+```{r, child = "topdown-promille-ex.Rmd"}
+```
+
+----------------------------------------------------
+
+### Lösung:
+
+Zum Beispiel so:
+```{r, def_promillerechner, code = readLines("topdown-promille-def.R"), echo=TRUE}
+```
+
+Die Fehlermeldungen könnte man hier sicher noch etwas informativer und allgemeinverständlicher machen indem man statt `checkmate::assert_XY` jeweils `if(<argument ungeeignet>) stop("<allgemeinverständliche Fehlermeldung>")` benutzt.  
